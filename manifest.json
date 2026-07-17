@@ -1,0 +1,11 @@
+{
+  "name": "cámara clara",
+  "short_name": "cámara clara",
+  "description": "Instrumento óptico digital — NMFT STUDIO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#08090a",
+  "theme_color": "#08090a",
+  "icons": []
+}
