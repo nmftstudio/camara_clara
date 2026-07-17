@@ -29,6 +29,9 @@
 
 * { box-sizing: border-box; }
 
+/* el atributo hidden debe ganarle a cualquier display de una clase */
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -175,11 +178,57 @@ button, input { font-family: inherit; }
   font-style: italic;
 }
 
-.dedication-signoff {
-  margin-bottom: 0;
+.dedication-love {
+  font-size: 1rem;
+  line-height: 1.65;
   color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.dedication-signoff {
+  margin: 0;
+  color: var(--ink-dim);
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+}
+
+/* explicación histórica, escondida detrás de un botón */
+.dedication-details {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.dedication-details summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+}
+.dedication-details summary::-webkit-details-marker { display: none; }
+
+.dedication-details summary::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 5px solid var(--gold);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 160ms ease;
+  flex-shrink: 0;
+}
+.dedication-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.dedication-details .dedication-body {
+  margin: 14px 0 0;
+  font-size: 0.88rem;
 }
 
 .btn-enter {
