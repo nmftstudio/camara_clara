@@ -81,6 +81,9 @@
   const infoModal = document.getElementById('info-modal');
   const btnCloseInfo = document.getElementById('btn-close-info');
 
+  const controlSheet = document.getElementById('control-sheet');
+  const btnToggleSheet = document.getElementById('btn-toggle-sheet');
+
   const captureToast = document.getElementById('capture-toast');
 
   /* ---------- pantalla de dedicatoria -> cámara ---------- */
@@ -92,6 +95,13 @@
 
   btnInfo.addEventListener('click', () => { infoModal.hidden = false; });
   btnCloseInfo.addEventListener('click', () => { infoModal.hidden = true; });
+
+  /* ---------- esconder / mostrar el panel de controles ---------- */
+  btnToggleSheet.addEventListener('click', () => {
+    const collapsed = controlSheet.classList.toggle('is-collapsed');
+    btnToggleSheet.setAttribute('aria-expanded', String(!collapsed));
+    btnToggleSheet.setAttribute('aria-label', collapsed ? 'Mostrar controles' : 'Ocultar controles');
+  });
 
   /* ---------- cámara ---------- */
   async function startCamera() {
@@ -179,6 +189,7 @@
     panelText.hidden = isImage;
     overlayImage.hidden = !isImage;
     overlayText.hidden = isImage;
+    resetOverlay();
   }
   modeImageBtn.addEventListener('click', () => setMode('image'));
   modeTextBtn.addEventListener('click', () => setMode('text'));

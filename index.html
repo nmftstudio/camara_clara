@@ -106,7 +106,14 @@
   </header>
 
   <!-- panel de control inferior -->
-  <div class="control-sheet">
+  <div id="control-sheet" class="control-sheet">
+
+    <button id="btn-toggle-sheet" class="sheet-handle" type="button" aria-expanded="true" aria-label="Ocultar controles">
+      <span class="sheet-handle-bar"></span>
+      <svg class="sheet-handle-chevron" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+
+    <div class="sheet-body">
 
     <div class="mode-switch" role="tablist" aria-label="Tipo de superposición">
       <button id="mode-image" class="mode-btn is-active" type="button" role="tab" aria-selected="true">Imagen</button>
@@ -174,6 +181,7 @@
       <button id="btn-flip" class="icon-btn action-btn" type="button" aria-label="Cambiar cámara">
         <svg viewBox="0 0 24 24"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 011 1v11a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z"/><path d="M9.5 13.5a2.5 3 0 105 0 2.5 3 0 00-5 0z"/><path d="M15 6l-1-2M9 6l1-2" opacity="0"/></svg>
       </button>
+    </div>
     </div>
   </div>
 
