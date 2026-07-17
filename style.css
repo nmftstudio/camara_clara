@@ -485,6 +485,37 @@ button, input { font-family: inherit; }
 }
 .font-select option { background: var(--bg-panel-raised); color: var(--ink); }
 
+.font-upload-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.font-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px dashed rgba(216,184,114,0.5);
+  background: rgba(216,184,114,0.06);
+  color: var(--gold);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.font-upload-btn svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.font-upload-status {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  margin: -4px 0 0;
+}
+.font-upload-status.is-error { color: #e08a8a; }
+.font-upload-status.is-success { color: var(--lime); }
+
 .slider-row {
   display: flex;
   align-items: center;

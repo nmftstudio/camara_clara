@@ -145,6 +145,15 @@
           <option value="'JetBrains Mono', monospace" data-canvas="JetBrains Mono">JetBrains Mono</option>
         </select>
       </label>
+
+      <div class="font-upload-row">
+        <label for="input-custom-font" class="font-upload-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+          <span>Cargar fuente</span>
+        </label>
+        <input type="file" id="input-custom-font" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" hidden>
+      </div>
+      <p id="custom-font-status" class="font-upload-status" hidden></p>
     </div>
 
     <div class="slider-row">

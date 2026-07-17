@@ -67,6 +67,8 @@
   const inputTextColor = document.getElementById('input-text-color');
   const inputTextSize = document.getElementById('input-text-size');
   const inputTextFont = document.getElementById('input-text-font');
+  const inputCustomFont = document.getElementById('input-custom-font');
+  const customFontStatus = document.getElementById('custom-font-status');
 
   const inputOpacity = document.getElementById('input-opacity');
   const opacityValue = document.getElementById('opacity-value');
@@ -204,6 +206,61 @@
   });
   inputTextFont.addEventListener('change', () => {
     overlayText.style.fontFamily = inputTextFont.value;
+  });
+
+  /* ---------- cargar una fuente propia ---------- */
+  let customFontCounter = 0;
+
+  function setFontStatus(message, kind) {
+    customFontStatus.textContent = message;
+    customFontStatus.hidden = !message;
+    customFontStatus.classList.remove('is-error', 'is-success');
+    if (kind) customFontStatus.classList.add(kind === 'error' ? 'is-error' : 'is-success');
+  }
+
+  function sanitizeFamilyName(filename) {
+    const base = filename.replace(/\.[^/.]+$/, '');
+    let clean = base.replace(/[^a-zA-Z0-9\s-]/g, '').trim().replace(/\s+/g, ' ');
+    if (!clean) clean = 'Fuente personalizada';
+    if (/^[0-9]/.test(clean)) clean = `F${clean}`;
+    customFontCounter += 1;
+    return `${clean} #${customFontCounter}`;
+  }
+
+  inputCustomFont.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    const validExt = /\.(ttf|otf|woff2?|)$/i.test(file.name) || file.type.includes('font');
+    if (!validExt) {
+      setFontStatus('Ese archivo no parece ser una fuente (.ttf, .otf, .woff, .woff2).', 'error');
+      return;
+    }
+
+    setFontStatus('Cargando fuente…', null);
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const familyName = sanitizeFamilyName(file.name);
+      const fontFace = new FontFace(familyName, buffer);
+      const loaded = await fontFace.load();
+      document.fonts.add(loaded);
+
+      const option = document.createElement('option');
+      option.value = `'${familyName}', sans-serif`;
+      option.dataset.canvas = familyName;
+      option.textContent = `${familyName.replace(/ #\d+$/, '')} (tuya)`;
+      inputTextFont.appendChild(option);
+      inputTextFont.value = option.value;
+      overlayText.style.fontFamily = option.value;
+
+      setFontStatus(`"${file.name}" lista para usar.`, 'success');
+    } catch (err) {
+      console.error('Error cargando fuente:', err);
+      setFontStatus('No se pudo cargar esa fuente. Probá con otro archivo.', 'error');
+    } finally {
+      inputCustomFont.value = '';
+    }
   });
 
   /* ---------- opacidad ---------- */
