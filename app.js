@@ -70,27 +70,69 @@
 
   /* ---------- cámara ---------- */
   async function startCamera() {
-    stopCamera();
+    await stopCamera();
     cameraError.hidden = true;
+
+    const constraintsFor = (facing) => ({
+      video: {
+        facingMode: { ideal: facing },
+        // sin resolución fija: forzar 1920x1080 hace que algunas cámaras
+        // traseras multi-lente entreguen cuadros negros al negociar el sensor
+      },
+      audio: false,
+    });
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: state.facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
-        audio: false,
-      });
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraintsFor(state.facingMode));
+      } catch (firstErr) {
+        // si falla la cámara pedida (p.ej. el dispositivo no tiene esa lente
+        // disponible en ese momento), reintentamos sin preferencia de lente
+        console.warn('Reintentando cámara sin facingMode:', firstErr);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      }
+
       state.stream = stream;
       video.srcObject = stream;
+
+      await new Promise((resolve, reject) => {
+        const onReady = () => { cleanup(); resolve(); };
+        const onError = (e) => { cleanup(); reject(e); };
+        function cleanup() {
+          video.removeEventListener('loadedmetadata', onReady);
+          video.removeEventListener('error', onError);
+        }
+        video.addEventListener('loadedmetadata', onReady, { once: true });
+        video.addEventListener('error', onError, { once: true });
+        // por si el evento ya se disparó antes de engancharse
+        if (video.readyState >= 1) onReady();
+      });
+
       await video.play();
+
+      // algunos navegadores entregan la primera pista con dimensiones 0x0
+      // por una fracción de segundo; si sigue en negro, forzamos un reintento
+      if (video.videoWidth === 0) {
+        await new Promise((r) => setTimeout(r, 400));
+        if (video.videoWidth === 0) throw new Error('Video sin dimensiones tras el intento inicial');
+      }
     } catch (err) {
       console.error('Camera error:', err);
       cameraError.hidden = false;
     }
   }
 
-  function stopCamera() {
+  async function stopCamera() {
     if (state.stream) {
       state.stream.getTracks().forEach((t) => t.stop());
       state.stream = null;
     }
+    video.pause();
+    video.srcObject = null;
+    // pequeño respiro para que el hardware de cámara se libere antes
+    // de pedir la siguiente lente (evita cuadros negros al alternar)
+    await new Promise((r) => setTimeout(r, 120));
   }
 
   btnRetryCamera.addEventListener('click', startCamera);
