@@ -464,6 +464,27 @@ button, input { font-family: inherit; }
 }
 .swatch-label input[type="range"] { width: 90px; }
 
+.font-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  font-size: 0.7rem;
+  color: var(--ink-dim);
+}
+.font-select {
+  flex: 1;
+  max-width: 200px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  padding: 8px 10px;
+  font-size: 0.82rem;
+}
+.font-select option { background: var(--bg-panel-raised); color: var(--ink); }
+
 .slider-row {
   display: flex;
   align-items: center;

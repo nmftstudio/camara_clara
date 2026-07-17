@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0b0a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Permanent+Marker&family=Playfair+Display:wght@700;900&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -34,11 +37,7 @@
 
     <div class="dedication-note">
       <p class="dedication-line">Para Marianela,</p>
-      <p class="dedication-love">
-        de todo lo que puedo enfocar, siempre volvés a ser vos lo más nítido.
-        Esto es una forma de mirarte a través de lo que ya existe, y de dejar
-        una marca donde antes no había nada.
-      </p>
+      <p class="dedication-love" id="dedication-love-main"></p>
       <p class="dedication-signoff">
         Con la nitidez de lo que se mira dos veces.<br>
         — Martín
@@ -134,6 +133,18 @@
           <input type="range" id="input-text-size" min="16" max="160" value="48">
         </label>
       </div>
+      <label class="font-label">
+        Tipografía
+        <select id="input-text-font" class="font-select">
+          <option value="'Unbounded', sans-serif" data-canvas="Unbounded">Unbounded</option>
+          <option value="'Inter', sans-serif" data-canvas="Inter">Inter</option>
+          <option value="'Caveat', cursive" data-canvas="Caveat">Caveat (manuscrita)</option>
+          <option value="'Playfair Display', serif" data-canvas="Playfair Display">Playfair Display</option>
+          <option value="'Bebas Neue', sans-serif" data-canvas="Bebas Neue">Bebas Neue</option>
+          <option value="'Permanent Marker', cursive" data-canvas="Permanent Marker">Permanent Marker</option>
+          <option value="'JetBrains Mono', monospace" data-canvas="JetBrains Mono">JetBrains Mono</option>
+        </select>
+      </label>
     </div>
 
     <div class="slider-row">
@@ -161,9 +172,7 @@
   <div id="info-modal" class="info-modal" hidden>
     <div class="info-modal-card">
       <p class="dedication-line">Para Marianela,</p>
-      <p class="dedication-love">
-        de todo lo que puedo enfocar, siempre volvés a ser vos lo más nítido.
-      </p>
+      <p class="dedication-love" id="dedication-love-modal"></p>
       <p class="dedication-signoff">— Martín · NMFT STUDIO</p>
 
       <details class="dedication-details">

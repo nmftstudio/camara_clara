@@ -1,6 +1,28 @@
 (() => {
   'use strict';
 
+  /* ---------- frases de amor: una distinta cada vez que se abre la app ---------- */
+  const LOVE_MESSAGES = [
+    'de todo lo que puedo enfocar, siempre volvés a ser vos lo más nítido.',
+    'esto es una forma de mirarte a través de lo que ya existe, y de dejar una marca donde antes no había nada.',
+    'hay lentes que corrigen la luz. vos corregís todo lo demás.',
+    'no necesito superponer nada para verte mejor: sos el fondo nítido de todo lo otro.',
+    'cada cámara busca la luz correcta. yo ya encontré la mía.',
+    'esta app superpone imágenes sobre el mundo. vos hace tiempo que estás superpuesta al mío.',
+    'entre tantas cosas fuera de foco, vos sos la única que no necesita ajuste.',
+    'si existiera un diafragma para el tiempo, lo dejaría abierto cada vez que estás cerca.',
+  ];
+
+  function pickLoveMessage() {
+    return LOVE_MESSAGES[Math.floor(Math.random() * LOVE_MESSAGES.length)];
+  }
+
+  const loveMessage = pickLoveMessage();
+  const loveMain = document.getElementById('dedication-love-main');
+  const loveModal = document.getElementById('dedication-love-modal');
+  if (loveMain) loveMain.textContent = loveMessage;
+  if (loveModal) loveModal.textContent = loveMessage;
+
   /* ---------- estado ---------- */
   const state = {
     facingMode: 'environment',
@@ -44,6 +66,7 @@
   const inputText = document.getElementById('input-text');
   const inputTextColor = document.getElementById('input-text-color');
   const inputTextSize = document.getElementById('input-text-size');
+  const inputTextFont = document.getElementById('input-text-font');
 
   const inputOpacity = document.getElementById('input-opacity');
   const opacityValue = document.getElementById('opacity-value');
@@ -179,6 +202,9 @@
   inputTextSize.addEventListener('input', () => {
     overlayText.style.fontSize = `${inputTextSize.value}px`;
   });
+  inputTextFont.addEventListener('change', () => {
+    overlayText.style.fontFamily = inputTextFont.value;
+  });
 
   /* ---------- opacidad ---------- */
   function applyOpacity() {
@@ -280,10 +306,17 @@
   function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
 
   /* ---------- captura de foto ---------- */
-  btnCapture.addEventListener('click', () => {
+  btnCapture.addEventListener('click', async () => {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
     if (!vw || !vh) return;
+
+    if (state.mode === 'text') {
+      const canvasFontName = inputTextFont.selectedOptions[0].dataset.canvas || 'Unbounded';
+      try {
+        await document.fonts.load(`700 48px '${canvasFontName}'`);
+      } catch (e) { /* si falla, se dibuja con la fuente de respaldo */ }
+    }
 
     captureCanvas.width = vw;
     captureCanvas.height = vh;
@@ -320,7 +353,8 @@
       ctx.drawImage(overlayImage, -displayW / 2, -displayH / 2, displayW, displayH);
     } else if (state.mode === 'text') {
       const size = Number(inputTextSize.value);
-      ctx.font = `700 ${size}px 'Unbounded', sans-serif`;
+      const canvasFontName = inputTextFont.selectedOptions[0].dataset.canvas || 'Unbounded';
+      ctx.font = `700 ${size}px '${canvasFontName}', sans-serif`;
       ctx.fillStyle = inputTextColor.value;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
